@@ -13,7 +13,15 @@ def get_weather(request):
         return render(request,'request/index.html')
     
 def fetch_weather(location):
+    
     api_url = f'https://weather.tsukumijima.net/api/forecast?city={location}'
-    response = requests.get(api_url)
+    city_ids = {"Osaka":"270000",
+                "Kyoto":"260010",
+                "Kobe":"280010",}
+    city_id = city_ids.get(location, "270000") 
+    params = {"city": city_id}
+    response = requests.get(api_url, params=params)
     weather_data = response.json()
+    print(weather_data["forecasts"][0])
+    weather_data["forecast"] = weather_data["forecasts"][0]
     return weather_data
